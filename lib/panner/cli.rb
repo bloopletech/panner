@@ -24,7 +24,7 @@ class Panner::CLI
     opt_parser.parse!(arguments)
     options[:url] = arguments.first
     
-    Panner::Panner.new(options).pan
+    Panner::Panner.new(options).start
   end
 end
     
