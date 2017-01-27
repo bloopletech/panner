@@ -1,17 +1,6 @@
 class Panner::Utils::Extractor
-  #These tags should be recursively replaced by their contents and the resulting content appended to the current paragraph
-  CONFORMING_TEXT_TAGS = %w(a abbr b bdi bdo cite code command datalist del dfn em i img ins kbd label mark math meter noscript output q ruby s samp small span strong sub sup textarea time var wbr)
-  NONCONFORMING_TEXT_TAGS = %w(acronym big center dir font listing plaintext spacer strike tt u xmp)
-  TEXT_TAGS = CONFORMING_TEXT_TAGS + NONCONFORMING_TEXT_TAGS
-
   HEADING_TAGS = %w(h1 h2 h3 h4 h5 h6)
-
-  BLOCK_PASSTHROUGH_TAGS = %w(div dl form ol table tbody thead tfoot tr ul)
-
   BLOCK_INITIATING_TAGS = %w(article aside body blockquote dd dt header li nav p pre section td th ul)
-
-  BLOCK_PLAIN_TEXT_TAGS = %w(pre plaintext listing xmp)
-
   ENHANCERS = { %w(b strong) => "*", %(i em) => "_" }
   
   def initialize(text)
