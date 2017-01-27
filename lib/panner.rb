@@ -11,7 +11,7 @@ module Panner
 end
 
 require "panner/version"
-require "panner/utils/html_extractor"
+require "panner/utils/extractor"
 require "panner/pans/wordpress"
 require "panner/panner"
 require "panner/cli"

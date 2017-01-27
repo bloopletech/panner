@@ -1,4 +1,4 @@
-class Panner::Utils::HTMLExtractor
+class Panner::Utils::Extractor
   #These tags should be recursively replaced by their contents and the resulting content appended to the current paragraph
   CONFORMING_TEXT_TAGS = %w(a abbr b bdi bdo cite code command datalist del dfn em i img ins kbd label mark math meter noscript output q ruby s samp small span strong sub sup textarea time var wbr)
   NONCONFORMING_TEXT_TAGS = %w(acronym big center dir font listing plaintext spacer strike tt u xmp)
@@ -18,17 +18,17 @@ class Panner::Utils::HTMLExtractor
     @doc = Nokogiri::HTML(text)
     @current_text_run = ""
 
-    @blocks = ""
+    @text = ""
   end
   
   def extract
     process(@doc.root)
     
-    @blocks << normalise(@current_text_run)
+    @text << normalise(@current_text_run)
     @current_text_run = ""
     @just_appended_br = false
     
-    @blocks
+    @text
   end
 
   def process(node)
@@ -36,25 +36,17 @@ class Panner::Utils::HTMLExtractor
 
     return if node_name == 'head'
 
-    #Handle repeated brs by making a paragraph break
-    if node_name == 'br'
-      if @just_appended_br
-        @blocks << normalise(@current_text_run) << "\n\n"
-        @current_text_run = ""
-        @just_appended_br = false
-      else
-        @just_appended_br = true
-      end
-
-      return
-    elsif @just_appended_br
-      @blocks << normalise(@current_text_run) << "\n"
-      @current_text_run = ""
-      @just_appended_br = false
-    end
-
     if node.text?
       @current_text_run << node.inner_text unless normalise(node.inner_text) == ''
+
+      return
+    end
+
+    #Handle repeated brs by making a paragraph break
+    if node_name == 'br'
+      @text << normalise(@current_text_run) << "\n"
+      @current_text_run = ""
+
       return
     end
 
@@ -62,7 +54,7 @@ class Panner::Utils::HTMLExtractor
     if BLOCK_INITIATING_TAGS.include?(node_name)
       node.children.each { |n| process(n) }
 
-      @blocks << normalise(@current_text_run) << "\n\n"
+      @text << normalise(@current_text_run) << "\n\n"
       @current_text_run = ""
 
       return
@@ -83,7 +75,7 @@ class Panner::Utils::HTMLExtractor
     if HEADING_TAGS.include?(node_name)
       node.children.each { |n| process(n) }
 
-      @blocks << "#{"#" * node_name[1..-1].to_i} #{normalise(@current_text_run)}\n\n" if @current_text_run.gsub(/\s+/m, '') != ''
+      @text << "#{"#" * node_name[1..-1].to_i} #{normalise(@current_text_run)}\n\n" unless normalise(@current_text_run) == ''
       @current_text_run = ""
 
       return

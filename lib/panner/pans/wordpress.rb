@@ -35,8 +35,7 @@ class Panner::Pans::Wordpress
   def parse_article(article)
     out = {}
     out[:title] = article.search(".entry-title").text
-    #out[:body] = Panner::Utils::HTMLExtractor.extract(article.search(".entry-content").inner_html)
-    out[:body] = Panner::Utils::HTMLExtractor.new(article.search(".entry-content").inner_html).extract
+    out[:body] = Panner::Utils::Extractor.new(article.search(".entry-content").inner_html).extract
     
     out
   end
