@@ -34,8 +34,8 @@ class Panner::Pans::Wordpress
   
   def parse_article(article)
     out = {}
-    out[:title] = article.search(".entry-title").text
-    out[:body] = Panner::Utils::Extractor.new(article.search(".entry-content").inner_html).extract
+    out[:title] = article.at_css(".entry-title").text
+    out[:body] = Deba.extract(article.at_css(".entry-content").inner_html)
     
     out
   end

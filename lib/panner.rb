@@ -1,9 +1,7 @@
 require "mechanize"
+require "deba"
 
 module Panner
-  module Utils
-  end
-
   module Pans
   end
 
@@ -11,7 +9,6 @@ module Panner
 end
 
 require "panner/version"
-require "panner/utils/extractor"
 require "panner/pans/wordpress"
 require "panner/panner"
 require "panner/cli"
