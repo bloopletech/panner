@@ -5,7 +5,6 @@ class Panner::Package
     raise "root must be an instance of Pathname" unless root.is_a?(Pathname)
 
     @root = root
-
     @paths = []
   end
 
@@ -17,6 +16,10 @@ class Panner::Package
     file = (@root + path)
     file.write(content) unless content.nil?
     @paths << file
+  end
+
+  def finish
+    add("package.json", @paths.map { |path| path.relative_path_from(@root).to_s }.to_json)
   end
 
   def create_agent

@@ -12,6 +12,10 @@ class Panner::PackageFileSaver < Mechanize::Download
       @filename = "#{SecureRandom.hex(16)}#{Pathname.new(@filename).extname}}"
     end
 
+    if(path.to_s.bytes.length > 256)
+      @filename = SecureRandom.hex(16)
+    end
+
     save(path)
 
     @package.add(@filename)
