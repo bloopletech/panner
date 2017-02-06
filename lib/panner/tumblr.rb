@@ -1,0 +1,2 @@
+module Panner::Tumblr
+end
